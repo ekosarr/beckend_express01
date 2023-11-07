@@ -2,8 +2,17 @@ import { BrowserRouter as Router, Route, Routes, Link }
  from 'react-router-dom';
 import Mahasiswa from '../pages/mahasiswa';
 import Jurusan from '../pages/jurusan'; 
+import Login from '../pages/auth/login';
+import Register from '../pages/auth/register';
 
 function Routing() {
+  const token = localStorage.getItem('token');
+  const isLoggedin = !!token;
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    console.log("login berhasil");
+    window.location.reload();
+  }
   return (
     <Router>
       <div>
@@ -29,11 +38,22 @@ function Routing() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/jrsn">jurusan</Link>
                 </li>
+                {isLoggedin ? (
+              <li className="nav-item">
+              <Link className="nav-link" onClick={handleLogout}>Logout</Link>
+              </li>
+              ) : (
+              <li className="nav-item">
+              <Link className="nav-link" to="/login">Login</Link>
+            </li>
+          )}
               </ul>
             </div>
           </div>
         </nav>
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/mhs" element={<Mahasiswa />} />
           <Route path="/jrsn" element={<Jurusan />} />
         </Routes>
